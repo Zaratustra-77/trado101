@@ -177,6 +177,11 @@ def test_orders(db):
     print(f"There are {pending_orders} ready orders.")
 
 
+def get_code_for_testing(phone_to_use):
+    client = create_mongo_connection(user_name, password, db_name)
+    db = create_mongo_db(client, db_name)
+    code = get_loginCode(db, phone_to_use)
+    return code
 # Main function
 
 ### Credentials

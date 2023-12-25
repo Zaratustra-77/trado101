@@ -2,7 +2,7 @@ import time
 import unittest
 
 from src.utils.imports import *
-
+from src.common.actions.login_actions import *
 
 class WebDriverSetup(unittest.TestCase):
     def setUp(self) -> None:
@@ -21,9 +21,9 @@ class WebDriverSetup(unittest.TestCase):
             self.driver = webdriver.Chrome(
                 service=ChromeService(ChromeDriverManager().install())
             )
+            self.login_module_actions = LoginModule(self.driver)
             self.driver.set_page_load_timeout(30)
             self.driver.get("http://qa.trado.ai/")
-
             time.sleep(5)
 
         except AssertionError:
