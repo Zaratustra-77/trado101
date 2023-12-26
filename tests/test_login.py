@@ -1,3 +1,6 @@
+import pytest
+from src.utils.webdriver_set_up import WebDriverSetup
+from src.common.actions.login_actions import LoginModule
 from src.utils.webdriver_set_up import WebDriverSetup
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -6,7 +9,16 @@ from selenium.webdriver.support import expected_conditions as EC
 
 class TestValidLogin(WebDriverSetup):
 
-    def test_1_valid_login(self):
+    def setUp(self):
+        # Call to the original setUp method of WebDriverSetup
+        super().setUp()
+
+    @pytest.mark.sanity
+    @pytest.mark.parametrize("browser", ["firefox", "chrome"])
+    def test_1_valid_login(self,browser):
+        WebDriverSetup.set_browser(browser)
+        self.setUp()
+        self.login_module_actions = LoginModule(self.driver)
         self.login_module_actions.click_login_btn()
         self.login_module_actions.send_phone('00123456')
         self.login_module_actions.click_enter()
@@ -16,11 +28,10 @@ class TestValidLogin(WebDriverSetup):
         text = "שלום    "
         hello = div_element_login_register = (
             WebDriverWait(self.driver, 10)
-            .until(EC.element_to_be_clickable((By.CLASS_NAME, "header_userAreaLink")))
-            .get_attribute("text")
+                .until(EC.element_to_be_clickable((By.CLASS_NAME, "header_userAreaLink")))
+                .get_attribute("text")
         )
         print(hello)
         assert str(hello) == text
-
 
 # # header_userAreaLink
